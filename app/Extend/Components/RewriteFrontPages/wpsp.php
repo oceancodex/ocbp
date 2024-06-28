@@ -2,11 +2,11 @@
 
 namespace WPSP\app\Extend\Components\RewriteFrontPages;
 
+use WPSP\Funcs;
 use WPSP\app\Traits\InstancesTrait;
 use WPSPCORE\Base\BaseRewriteFrontPage;
 use WPSPCORE\Integration\RankmathSEO;
 use WPSPCORE\Integration\YoastSEO;
-use WPSP\Funcs;
 
 class wpsp extends BaseRewriteFrontPage {
 
@@ -29,9 +29,15 @@ class wpsp extends BaseRewriteFrontPage {
 	 *
 	 */
 
-	public function access(): void {
-//		global $wp_query;
+	public function update($path = null): void {
+//		global $wp_query, $post;
 //		echo '<pre>'; print_r($wp_query); echo '</pre>';
+	}
+
+	public function access(): void {
+//		global $wp_query, $post;
+//		echo '<pre>'; print_r($wp_query); echo '</pre>';
+//		$post->post_title = $this->rewriteIdent;
 
 //		add_filter('yoast_seo_development_mode', '__return_true');
 
@@ -47,6 +53,7 @@ class wpsp extends BaseRewriteFrontPage {
 		$this->seo->setRobots(['index, follow']);
 		$this->seo->setCanonical($this->currentURL);
 		$this->seo->setTitle($this->queryVarGroup1);
+		$this->seo->setDocumentTitle($this->queryVarGroup1);
 		$this->seo->setDescription('Rewrite front page custom SEO description.');
 
 		/**
@@ -64,6 +71,10 @@ class wpsp extends BaseRewriteFrontPage {
 		$this->seo->setSchemaBreadcrumb([$this, 'schemaBreadcrumb'], 10, 1);
 
 		$this->seo->apply();
+	}
+
+	public function customProperties() {
+
 	}
 
 	/*

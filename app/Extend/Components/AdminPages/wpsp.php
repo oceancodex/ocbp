@@ -66,6 +66,7 @@ class wpsp extends BaseAdminPage {
 	 */
 
 	public function index(): void {
+
 		if ($this->request->get('updated') && $this->parentSlug !== 'options-general.php') {
 			Funcs::notice(Funcs::trans('Updated successfully'), 'success');
 		}

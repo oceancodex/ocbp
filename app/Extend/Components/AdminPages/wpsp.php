@@ -20,10 +20,26 @@ class wpsp extends BaseAdminPage {
 //	public mixed $menuSlug       = 'wpsp';
 	public mixed $iconUrl        = 'dashicons-admin-generic';
 	public mixed $position       = 2;
-	public mixed $isSubAdminPage = true;
-	public mixed $parentSlug     = 'options-general.php';
+//	public mixed $isSubAdminPage = true;
+//	public mixed $parentSlug     = 'options-general.php';
 
-	public mixed $checkDatabase  = null;
+	private mixed $checkDatabase = null;
+	private mixed $table         = null;
+
+	/*
+	 *
+	 */
+
+	public function customProperties(): void {
+//		$this->menuTitle      = '';
+//		$this->pageTitle      = '';
+//		$this->capability     = '';
+//		$this->menuSlug       = '';
+//		$this->iconUrl        = '';
+//		$this->position       = '';
+//		$this->isSubAdminPage = false;
+//		$this->parentSlug     = '';
+	}
 
 	/*
 	 *
@@ -50,15 +66,8 @@ class wpsp extends BaseAdminPage {
 		}
 	}
 
-	public function customProperties(): void {
-//		$this->menuTitle      = '';
-//		$this->pageTitle      = '';
-//		$this->capability     = '';
-//		$this->menuSlug       = '';
-//		$this->iconUrl        = '';
-//		$this->position       = '';
-//		$this->isSubAdminPage = false;
-//		$this->parentSlug     = '';
+	public function afterLoad($menuPage): void {
+		$this->table = new \WPSP\app\Extend\Components\ListTables\Settings();
 	}
 
 	/*
@@ -66,8 +75,7 @@ class wpsp extends BaseAdminPage {
 	 */
 
 	public function index(): void {
-
-		if ($this->request->get('updated') && $this->parentSlug !== 'options-general.php') {
+		if ($this->request->get('updated') && $this->parentSlug !== 'options-general.php' && $this->request->get('tab') !== 'table') {
 			Funcs::notice(Funcs::trans('Updated successfully'), 'success');
 		}
 
@@ -76,38 +84,44 @@ class wpsp extends BaseAdminPage {
 		$settings      = Cache::getItemValue('settings');
 		$checkLicense  = License::checkLicense($settings['license_key'] ?? null);
 
+		$table = $this->table;
+
 		echo Funcs::view('modules.web.admin-pages.wpsp.main', compact(
 			'requestParams',
 			'menuSlug',
 			'settings',
-			'checkLicense'
+			'checkLicense',
+			'table'
 		))->with([
 			'checkDatabase' => $this->checkDatabase,
 		]);
 	}
 
 	public function update(): void {
-		$settings     = $this->request->get('settings');
+		$tab = $this->request->get('tab');
+		if ($tab !== 'table') {
+			$settings = $this->request->get('settings');
 
-		$existSettings = Cache::getItemValue('settings');
-		$existSettings = array_merge($existSettings ?? [], $settings ?? []);
+			$existSettings = Cache::getItemValue('settings');
+			$existSettings = array_merge($existSettings ?? [], $settings ?? []);
 
-		// Save settings into cache.
-		Cache::set('settings', function() use ($existSettings) {
-			return $existSettings;
-		});
+			// Save settings into cache.
+			Cache::set('settings', function() use ($existSettings) {
+				return $existSettings;
+			});
 
-		// Delete license information cache.
-		Cache::delete('license_information');
+			// Delete license information cache.
+			Cache::delete('license_information');
 
-		// Save settings into database.
-		Settings::updateOrCreate([
-			'key' => 'settings',
-		], [
-			'value' => json_encode($existSettings),
-		]);
+			// Save settings into database.
+			Settings::updateOrCreate([
+				'key' => 'settings',
+			], [
+				'value' => json_encode($existSettings),
+			]);
 
-		wp_safe_redirect(wp_get_raw_referer() . '&updated=true');
+			wp_safe_redirect(wp_get_raw_referer() . '&updated=true');
+		}
 	}
 
 	/*
@@ -127,7 +141,6 @@ class wpsp extends BaseAdminPage {
 			null,
 			Funcs::instance()->_getVersion()
 		);
-//		wp_enqueue_style(config('app.short_name') . '-bootstrap-buttons', Funcs::asset('/plugins/bootstrap/css/bootstrap-buttons.css'), null, Funcs::instance()->getVersion());
 		wp_enqueue_style(
 			Funcs::config('app.short_name') . '-bootstrap-utilities',
 			Funcs::instance()->_getPublicUrl() . '/plugins/bootstrap/css/bootstrap-utilities.css',
@@ -151,8 +164,8 @@ class wpsp extends BaseAdminPage {
 			Funcs::config('app.short_name') . '-database',
 			Funcs::config('app.short_name') . '_localize',
 			[
-				'ajax_url' => admin_url('admin-ajax.php'),
-				'nonce' => wp_create_nonce(Funcs::config('app.short_name')),
+				'ajax_url'   => admin_url('admin-ajax.php'),
+				'nonce'      => wp_create_nonce(Funcs::config('app.short_name')),
 				'public_url' => Funcs::instance()->_getPublicUrl(),
 			]
 		);

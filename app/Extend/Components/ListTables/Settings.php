@@ -10,76 +10,69 @@ class Settings extends BaseListTable {
 
 	use HttpRequestTrait;
 
-	public ?string $listTableId    = 'settings';
-	public ?string $defaultOrder   = 'asc';
-	public ?string $defaultOrderby = 'id';
+	public ?string $defaultOrder        = 'asc';
+	public ?string $defaultOrderby      = 'id';
+	public ?array  $removeQueryVars     = [
+		'_wp_http_referer',
+		'_wpnonce',
+		'action',
+		'action2',
+		'filter_action',
+		'id'
+	];
 
-	private ?string $page   = null;
-	private ?string $tab    = null;
-	private ?string $type   = null;
-	private ?string $search = null;
-	private ?string $url    = null;
+	// Request parameters.
+	private ?string $page               = null;
+	private ?string $tab                = null;
+	private ?string $type               = null;
+	private ?string $search             = null;
+	private ?string $option             = null;
+	private ?string $paged              = null;
+	private ?int    $total_items        = 0;
+	private ?string $orderby            = 'id';
+	private ?string $order              = 'asc';
+
+	private ?string $url                = null;
+	private ?string $prefixScreenOption = null;
+	private ?int    $itemsPerPage       = 10;
 
 	/**
 	 * Override construct to assign some variables.
 	 */
 	public function __construct($args = []) {
 		parent::__construct($args);
-		$this->page   = self::request()->get('page');
-		$this->tab    = self::request()->get('tab');
-		$this->search = self::request()->get('s');
-		$this->type   = self::request()->get('type');
-		$this->url    = Funcs::instance()->_buildUrl(self::request()->getBaseUrl(), [
+		$this->page               = self::request()->get('page');
+		$this->paged              = self::request()->get('paged');
+		$this->tab                = self::request()->get('tab');
+		$this->type               = self::request()->get('type');
+		$this->search             = self::request()->get('s');
+		$this->option             = self::request()->get('c');
+		$this->orderby            = self::request()->get('orderby');
+		$this->order              = self::request()->get('order');
+		$this->url                = Funcs::instance()->_buildUrl(self::request()->getBaseUrl(), [
 			'page' => $this->page,
 			'tab'  => $this->tab,
 		]);
-		$this->url    .= $this->search ? '&s=' . $this->search : '';
+		$this->url                .= $this->search ? '&s=' . $this->search : '';
+		$this->url                .= $this->option ? '&c=' . $this->option : '';
+		$this->prefixScreenOption = Funcs::env('APP_SHORT_NAME', true) . '_' . $this->page;
+		$this->itemsPerPage       = $this->get_items_per_page($this->prefixScreenOption . '_items_per_page');
 	}
+
+	/*
+	 *
+	 */
 
 	/**
 	 * Data.
 	 */
 
 	public function get_data(): array {
-//		return \WPSP\app\Models\Settings::all()->toArray();
-		return [
-			[
-				'id'    => 1,
-				'key'   => 'key1',
-				'value' => 'value1',
-			],
-			[
-				'id'    => 2,
-				'key'   => 'key2',
-				'value' => 'value2',
-			],
-			[
-				'id'    => 3,
-				'key'   => 'key3',
-				'value' => 'value3',
-			],
-			[
-				'id'    => 4,
-				'key'   => 'key4',
-				'value' => 'value4',
-			],
-			[
-				'id'    => 5,
-				'key'   => 'key5',
-				'value' => 'value5',
-			],
-		];
-	}
-
-	/**
-	 * View links.
-	 */
-
-	public function get_views(): array {
-		return [
-			'all'       => '<a href="' . $this->url . '" class="' . (($this->type == 'all' || !$this->type) ? 'current' : '') . '">All <span class="count">(10)</span></a>',
-			'published' => '<a href="' . $this->url . '&type=published" class="' . ($this->type == 'published' ? 'current' : '') . '">Published <span class="count">(10)</span></a>'
-		];
+		$accountsModel     = \WPSP\app\Models\AccountsModel::query();
+		$this->total_items = $accountsModel->count();
+		$take              = $this->itemsPerPage;
+		$skip              = ($this->paged - 1) * $take;
+		return $accountsModel->orderBy($this->orderby, $this->order)->skip($skip)->take($take)->get()->toArray();
 	}
 
 	/**
@@ -96,17 +89,17 @@ class Settings extends BaseListTable {
 	public function get_columns(): array {
 		return [
 			'cb'    => '<input type="checkbox" />',
+			'name'  => 'Name',
 			'id'    => 'ID',
-			'key'   => 'Key',
-			'value' => 'Value',
+			'email' => 'Email',
 		];
 	}
 
 	public function column_default($item, $column_name) {
 		switch ($column_name) {
+			case 'name':
 			case 'id':
-			case 'key':
-			case 'value':
+			case 'email':
 			default:
 				return $item[$column_name];
 		}
@@ -114,8 +107,61 @@ class Settings extends BaseListTable {
 
 	public function get_sortable_columns(): array {
 		return [
-			'id'  => ['id', false],
-			'key' => ['key', false],
+			'name'  => ['name', false],
+			'id'    => ['id', false],
+			'email' => ['email', false],
+		];
+	}
+
+	public function column_name($item): string {
+		$actions = [
+			'edit'   => sprintf('<a href="?page=%s&action=%s&item=%s">Edit</a>', $_REQUEST['page'], 'edit', $item['name']),
+			'delete' => sprintf('<a href="?page=%s&action=%s&item=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['name']),
+		];
+
+		return sprintf('%1$s %2$s', $item['name'], $this->row_actions($actions));
+	}
+
+	/**
+	 * Prepare items.
+	 */
+
+	public function prepare_items(): void {
+
+		// Handle bulk actions.
+		$this->process_bulk_action();
+
+		$data                  = $this->get_data();
+		$this->_column_headers = $this->get_column_info();
+
+//		usort($data, [&$this, 'usort_reorder']);
+
+//		$per_page     = $this->get_items_per_page(Funcs::env('APP_SHORT_NAME', true) . '_' . $this->page . '_items_per_page');
+//		$current_page = $this->get_pagenum();
+//		$total_items  = count($data);
+//		$data         = array_slice($data, (($current_page - 1) * $per_page), $per_page);
+
+		$this->set_pagination_args([
+			'total_items' => $this->total_items,
+			'per_page'    => $this->itemsPerPage,
+			'total_pages' => ceil($this->total_items / $this->itemsPerPage),
+		]);
+
+		$this->items = $data;
+	}
+
+	/*
+	 *
+	 */
+
+	/**
+	 * View links.
+	 */
+
+	public function get_views(): array {
+		return [
+			'all'       => '<a href="' . $this->url . '" class="' . (($this->type == 'all' || !$this->type) ? 'current' : '') . '">All <span class="count">(10)</span></a>',
+			'published' => '<a href="' . $this->url . '&type=published" class="' . ($this->type == 'published' ? 'current' : '') . '">Published <span class="count">(10)</span></a>',
 		];
 	}
 
@@ -142,56 +188,12 @@ class Settings extends BaseListTable {
 
 			// Multi delete.
 			if ('delete' === $this->current_action()) {
-//				echo '<pre style="z-index: 9999; position: relative; clear: both;">'; print_r(self::request()->request->all()); echo '</pre>';
+				echo '<pre style="z-index: 9999; position: relative; clear: both;">'; print_r(self::request()->query->all()); echo '</pre>';
 				Funcs::notice(Funcs::trans('Deleted successfully'), 'success', true);
 			}
 
 		}
 
-	}
-
-	/**
-	 * Prepare items.
-	 */
-
-	public function prepare_items(): void {
-
-		// Handle bulk actions.
-		$this->process_bulk_action();
-
-		$data                  = $this->get_data();
-		$this->_column_headers = $this->get_column_info();
-
-		usort($data, [&$this, 'usort_reorder']);
-
-		/* Pagination */
-		$per_page     = $this->get_items_per_page(Funcs::env('APP_SHORT_NAME', true) . '_' . $this->page . '_items_per_page');
-		$current_page = $this->get_pagenum();
-		$total_items  = count($data);
-
-		$data = array_slice($data, (($current_page - 1) * $per_page), $per_page);
-
-		$this->set_pagination_args([
-			'total_items' => $total_items,
-			'per_page'    => $per_page,
-			'total_pages' => ceil($total_items / $per_page),
-		]);
-
-		$this->items = $data;
-	}
-
-	public function usort_reorder($a, $b): int {
-		// If no sort, default
-		$orderby = (!empty($_GET['orderby'])) ? $_GET['orderby'] : $this->defaultOrderby;
-
-		// If no order, default to asc
-		$order = (!empty($_GET['order'])) ? $_GET['order'] : $this->defaultOrder;
-
-		// Determine sort order
-		$result = strcmp($a[$orderby], $b[$orderby]);
-
-		// Send final sort direction to usort
-		return ($order === 'asc') ? $result : -$result;
 	}
 
 	/**
@@ -208,6 +210,17 @@ class Settings extends BaseListTable {
 			echo '</div>';
 		}
 
+	}
+
+	/**
+	 * Other functions.
+	 */
+
+	public function usort_reorder($a, $b): int {
+		$orderby = (!empty($_GET['orderby'])) ? $_GET['orderby'] : $this->defaultOrderby;
+		$order   = (!empty($_GET['order'])) ? $_GET['order'] : $this->defaultOrder;
+		$result  = strnatcmp($a[$orderby], $b[$orderby]);
+		return ($order === 'asc') ? $result : -$result;
 	}
 
 }

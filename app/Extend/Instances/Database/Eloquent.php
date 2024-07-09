@@ -10,11 +10,13 @@ class Eloquent extends \WPSPCORE\Database\Eloquent {
 	use InstancesTrait;
 
 	public static function init(): void {
-		self::instance(
-			Funcs::instance()->_getMainPath(),
-			Funcs::instance()->_getRootNamespace(),
-			Funcs::instance()->_getPrefixEnv()
-		);
+		if (self::$instance === null) {
+			self::instance(
+				Funcs::instance()->_getMainPath(),
+				Funcs::instance()->_getRootNamespace(),
+				Funcs::instance()->_getPrefixEnv()
+			);
+		}
 	}
 
 }

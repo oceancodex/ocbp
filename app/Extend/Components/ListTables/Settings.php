@@ -2,6 +2,8 @@
 
 namespace WPSP\app\Extend\Components\ListTables;
 
+use Symfony\Contracts\Cache\ItemInterface;
+use WPSP\app\Extend\Instances\Cache\Cache;
 use WPSP\app\Models\SettingsModel;
 use WPSP\Funcs;
 use WPSPCORE\Base\BaseListTable;
@@ -68,10 +70,24 @@ class Settings extends BaseListTable {
 	public function get_data(): array {
 //		$model             = \WPSP\app\Models\AccountsModel::query();
 		$model             = \WPSP\app\Models\SettingsModel::query();
-		$this->total_items = $model->count();
+//		$model             = \WPSP\app\Models\VideosModel::query();
+
+		$totalCacheKey = 'list_table_settings_total_items';
+//		Cache::delete($totalCacheKey);
+		$this->total_items = Cache::get($totalCacheKey, function(ItemInterface $item) use ($model) {
+			return $model->count();
+		});
+
+//		$this->total_items = $model->count();
 		$take              = $this->itemsPerPage;
 		$skip              = ($this->paged - 1) * $take;
-		return $model->orderBy($this->orderby, $this->order)->skip($skip)->take($take)->get()->toArray();
+
+		$dataCacheKey = 'list_table_settings_' . $this->itemsPerPage . '_' . $this->paged;
+//		Cache::delete($dataCacheKey);
+		return Cache::get($dataCacheKey, function (ItemInterface $item) use ($model, $take, $skip) {
+			$item->expiresAfter(60); // Cache in seconds.
+			return $model->orderBy($this->orderby, $this->order)->skip($skip)->take($take)->get()->toArray();
+		});
 	}
 
 	/**
@@ -81,7 +97,7 @@ class Settings extends BaseListTable {
 	public function column_cb($item) {
 		return sprintf(
 			'<input type="checkbox" name="items[]" value="%s" />',
-			$item['id']
+			$item['_id'] ?? $item['id']
 		);
 	}
 
@@ -89,6 +105,7 @@ class Settings extends BaseListTable {
 		return [
 			'cb'    => '<input type="checkbox" />',
 			'id'    => 'ID',
+//			'_id'   => 'ID',
 //			'name'  => 'Name',
 //			'email' => 'Email',
 			'key'   => 'Key',
@@ -99,6 +116,7 @@ class Settings extends BaseListTable {
 	public function column_default($item, $column_name) {
 		switch ($column_name) {
 			case 'id':
+//			case '_id':
 //			case 'name':
 //			case 'email':
 			case 'key':
@@ -111,6 +129,7 @@ class Settings extends BaseListTable {
 	public function get_sortable_columns(): array {
 		return [
 			'id'    => ['id', false],
+//			'_id'   => ['_id', false],
 //			'name'  => ['name', false],
 //			'email' => ['email', false],
 			'key'   => ['key', false],

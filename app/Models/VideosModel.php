@@ -1,15 +1,15 @@
 <?php
 namespace WPSP\app\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use WPSPCORE\Traits\ObserversTrait;
 
-class PostsModel extends Model {
+class VideosModel extends Model {
 	use SoftDeletes, ObserversTrait;
 
-	protected $connection = 'wpsp_wordpress';
-	protected $table      = 'posts';
+	protected $connection = 'wpsp_mongodb';
+	protected $table      = 'wpsp_mongodb_videos';
 //	protected $primaryKey = 'id';
 
 //	protected $appends;
@@ -43,7 +43,7 @@ class PostsModel extends Model {
 //	public    $wasRecentlyCreated;
 
 //	protected static array $observers = [
-//		\WPSP\app\Observers\PostsObserver::class,
+//		\WPSP\app\Observers\SettingsObserver::class,
 //	];
 
 //	public function __construct(array $attributes = []) {
@@ -52,16 +52,4 @@ class PostsModel extends Model {
 //		parent::__construct($attributes);
 //	}
 
-	public function categories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany {
-		return $this->belongsToMany(CategoriesModel::class, 'post_category_relationships', 'post_id', 'category_id');
-	}
-
-	public function addCategory($categoryId): void {
-		$this->categories()->attach($categoryId);
-	}
-
-	public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
-		return $this->belongsTo(UsersModel::class, 'user_id');
-	}
-	
 }

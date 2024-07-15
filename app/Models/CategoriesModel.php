@@ -8,7 +8,7 @@ use WPSPCORE\Traits\ObserversTrait;
 class CategoriesModel extends Model {
 	use SoftDeletes, ObserversTrait;
 
-	protected $connection = 'wpsp_mysql';
+	protected $connection = 'wpsp_wordpress';
 	protected $table      = 'categories';
 //	protected $primaryKey = 'id';
 
@@ -45,6 +45,12 @@ class CategoriesModel extends Model {
 //	protected static array $observers = [
 //		\WPSP\app\Observers\CategoriesObserver::class,
 //	];
+
+//	public function __construct(array $attributes = []) {
+//		$this->getConnection()->setTablePrefix('wp_wpsp_');
+//		$this->setConnection(Funcs::instance()->_getDBTablePrefix(false) . 'mysql');
+//		parent::__construct($attributes);
+//	}
 
 	public function posts(): \Illuminate\Database\Eloquent\Relations\BelongsToMany {
 		return $this->belongsToMany(PostsModel::class, 'post_category_relationships', 'category_id', 'post_id');

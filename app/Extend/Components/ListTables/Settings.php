@@ -4,6 +4,7 @@ namespace WPSP\app\Extend\Components\ListTables;
 
 use Symfony\Contracts\Cache\ItemInterface;
 use WPSP\app\Extend\Instances\Cache\Cache;
+use WPSP\app\Models\PostsModel;
 use WPSP\app\Models\SettingsModel;
 use WPSP\Funcs;
 use WPSPCORE\Base\BaseListTable;
@@ -13,9 +14,9 @@ class Settings extends BaseListTable {
 
 	use HttpRequestTrait;
 
-//	public ?string $defaultOrder    = 'asc';
-//	public ?string $defaultOrderBy  = 'id';
-	public ?array  $removeQueryVars = [
+//	public ?string $defaultOrder        = 'asc';
+//	public ?string $defaultOrderBy      = 'id';
+	public ?array  $removeQueryVars     = [
 		'_wp_http_referer',
 		'_wpnonce',
 		'action',
@@ -25,18 +26,19 @@ class Settings extends BaseListTable {
 	];
 
 	// Request parameters.
-	private ?string $page        = null;
-	private ?string $tab         = null;
-	private ?string $type        = null;
-	private ?string $search      = null;
-	private ?string $option      = null;
-	private ?string $paged       = null;
-	private ?int    $total_items = 0;
-	private ?string $orderby     = 'id';
-	private ?string $order       = 'asc';
+	private ?string $page               = null;
+	private ?string $tab                = null;
+	private ?string $type               = null;
+	private ?string $search             = null;
+	private ?string $option             = null;
+	private ?string $paged              = null;
+	private ?int    $total_items        = 0;
+	private ?string $orderby            = 'id';
+	private ?string $order              = 'asc';
 
-	private ?string $url          = null;
-	private ?int    $itemsPerPage = 10;
+	private ?string $url                = null;
+	private ?string $prefixScreenOption = null;
+	private ?int    $itemsPerPage       = 10;
 
 	/**
 	 * Override construct to assign some variables.
@@ -69,12 +71,13 @@ class Settings extends BaseListTable {
 
 	public function get_data(): array {
 //		$model             = \WPSP\app\Models\AccountsModel::query();
-		$model             = \WPSP\app\Models\SettingsModel::query();
-//		$model             = \WPSP\app\Models\VideosModel::query();
+//		$model             = \WPSP\app\Models\SettingsModel::query();
+		$model             = \WPSP\app\Models\VideosModel::query();
 
 		$totalCacheKey = 'list_table_settings_total_items';
 //		Cache::delete($totalCacheKey);
 		$this->total_items = Cache::get($totalCacheKey, function(ItemInterface $item) use ($model) {
+			$item->expiresAfter(60); // Cache in seconds.
 			return $model->count();
 		});
 
@@ -104,8 +107,8 @@ class Settings extends BaseListTable {
 	public function get_columns(): array {
 		return [
 			'cb'    => '<input type="checkbox" />',
-			'id'    => 'ID',
-//			'_id'   => 'ID',
+//			'id'    => 'ID',
+			'_id'   => 'ID',
 //			'name'  => 'Name',
 //			'email' => 'Email',
 			'key'   => 'Key',
@@ -115,8 +118,8 @@ class Settings extends BaseListTable {
 
 	public function column_default($item, $column_name) {
 		switch ($column_name) {
-			case 'id':
-//			case '_id':
+//			case 'id':
+			case '_id':
 //			case 'name':
 //			case 'email':
 			case 'key':
@@ -128,8 +131,8 @@ class Settings extends BaseListTable {
 
 	public function get_sortable_columns(): array {
 		return [
-			'id'    => ['id', false],
-//			'_id'   => ['_id', false],
+//			'id'    => ['id', false],
+			'_id'   => ['_id', false],
 //			'name'  => ['name', false],
 //			'email' => ['email', false],
 			'key'   => ['key', false],

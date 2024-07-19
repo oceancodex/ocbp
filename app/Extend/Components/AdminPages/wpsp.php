@@ -17,20 +17,20 @@ class wpsp extends BaseAdminPage {
 
 	use InstancesTrait;
 
-	public mixed $menu_title            = 'WPSP Settings';
-//	public mixed $page_title            = 'WPSP';
-	public mixed $capability            = 'edit_posts';
-//	public mixed $menu_slug             = 'wpsp';
-	public mixed $icon_url              = 'dashicons-admin-generic';
-	public mixed $position              = 2;
-//	public mixed $isSubAdminPage        = true;
-//	public mixed $parent_slug           = 'options-general.php';
-	public mixed $removeFirstSubmenu    = true;
+	public $menu_title          = 'WPSP Settings';
+//	public $page_title          = 'WPSP';
+	public $capability          = 'edit_posts';
+//	public $menu_slug           = 'wpsp';
+	public $icon_url            = 'dashicons-admin-generic';
+	public $position            = 2;
+//	public $isSubAdminPage      = true;
+//	public $parent_slug         = 'options-general.php';
+	public $removeFirstSubmenu  = true;
 
-	private mixed $checkDatabase        = null;
-	private mixed $table                = null;
-	private mixed $currentTab           = null;
-	private mixed $currentPage          = null;
+	private $checkDatabase      = null;
+	private $table              = null;
+	private $currentTab         = null;
+	private $currentPage        = null;
 
 	/*
 	 *

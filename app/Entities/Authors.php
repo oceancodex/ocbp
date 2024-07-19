@@ -8,16 +8,22 @@ use WPSPCORE\Base\BaseEntity;
  * @see https://www.doctrine-project.org/projects/doctrine-orm/en/3.2/reference/association-mapping.html
  */
 
-//#[ORM\Entity]
-//#[ORM\Table(name: 'authors')]
+/**
+ * @ORM\Entity
+ * @ORM\Table(name: 'authors')
+ */
 class Authors extends BaseEntity {
 
-	#[ORM\Id]
-	#[ORM\Column(type: 'integer')]
-	#[ORM\GeneratedValue]
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type: 'integer')
+	 * @ORM\GeneratedValue
+	 */
 	protected int $id;
 
-	#[ORM\Column(type: 'string', nullable: false)]
+	/**
+	 * @ORM\Column(type: 'string', nullable: true)
+	 */
 	protected string $name;
 
 

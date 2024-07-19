@@ -11,7 +11,12 @@ class ApiAuthentication extends BaseMiddleware {
 
 	use InstancesTrait;
 
-	public function handle(Request|WP_REST_Request $request): bool {
+	/**
+	 * @param Request|WP_REST_Request $request
+	 *
+	 * @return bool
+	 */
+	public function handle($request): bool {
 		if (method_exists($request, 'get_header')) {
 			return $request->get_header('Authorization') == 'Bearer 123456789';
 		}

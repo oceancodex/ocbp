@@ -10,20 +10,20 @@ class wpsp_tab_dashboard extends BaseAdminPage {
 
 	use InstancesTrait;
 
-	public mixed $menu_title            = 'Tab: Dashboard';
-//	public mixed $page_title            = 'Tab: Dashboard';
-	public mixed $capability            = 'manage_options';
-//	public mixed $menu_slug             = 'wpsp-dashboard';
-	public mixed $icon_url              = 'dashicons-admin-generic';
-//	public mixed $position              = 1;
-	public mixed $isSubAdminPage        = true;
-	public mixed $parent_slug           = 'wpsp';
-//	public mixed $removeFirstSubmenu    = false;
+	public $menu_title          = 'Tab: Dashboard';
+//	public $page_title          = 'Tab: Dashboard';
+	public $capability          = 'manage_options';
+//	public $menu_slug           = 'wpsp-dashboard';
+	public $icon_url            = 'dashicons-admin-generic';
+//	public $position            = 1;
+	public $isSubAdminPage      = true;
+	public $parent_slug         = 'wpsp';
+//	public $removeFirstSubmenu  = false;
 
-//	private mixed $checkDatabase        = null;
-	private mixed $table                = null;
-	private mixed $currentTab           = null;
-	private mixed $currentPage          = null;
+//	private $checkDatabase      = null;
+	private $table              = null;
+	private $currentTab         = null;
+	private $currentPage        = null;
 
 	/*
 	 *
@@ -86,7 +86,6 @@ class wpsp_tab_dashboard extends BaseAdminPage {
 	 */
 
 	public function index(): void {
-		echo '123';
 //		if ($this->request->get('updated') && $this->parent_slug !== 'options-general.php' && $this->request->get('tab') !== 'table') {
 //			Funcs::notice(Funcs::trans('Updated successfully', true), 'success');
 //		}

@@ -4,22 +4,32 @@ namespace WPSP\app\Entities;
 use Doctrine\ORM\Mapping as ORM;
 use WPSPCORE\Base\BaseEntity;
 
-#[ORM\Entity]
-#[ORM\Table(name:'settings')]
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="message")
+ */
 class Settings extends BaseEntity {
 
-	#[ORM\Id]
-	#[ORM\Column(type: 'integer')]
-	#[ORM\GeneratedValue]
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type: 'integer')
+	 * @ORM\GeneratedValue
+	 */
 	protected int $id;
 
-	#[ORM\Column(type: "string", nullable: false)]
+	/**
+	 * @ORM\Column(type: "string", nullable: false)
+	 */
 	private string $key;
 
-	#[ORM\Column(type: "text", nullable: true)]
+	/**
+	 * @ORM\Column(type: "text", nullable: true)
+	 */
 	private string $value;
 
-	#[ORM\Column(type: "text", nullable: true)]
+	/**
+	 * @ORM\Column(type: "text", nullable: true)
+	 */
 	private string $description;
 
 	/*

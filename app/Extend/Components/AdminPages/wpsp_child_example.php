@@ -17,20 +17,20 @@ class wpsp_child_example extends BaseAdminPage {
 
 	use InstancesTrait;
 
-	public mixed $menu_title            = 'Child: Example';
-//	public mixed $page_title            = 'Child: Example';
-	public mixed $capability            = 'manage_options';
-//	public mixed $menu_slug             = 'wpsp-child-example';
-	public mixed $icon_url              = 'dashicons-admin-generic';
-//	public mixed $position              = 2;
-	public mixed $isSubAdminPage        = true;
-	public mixed $parent_slug           = 'wpsp';
-//	public mixed $removeFirstSubmenu    = false;
+	public $menu_title          = 'Child: Example';
+//	public $page_title          = 'Child: Example';
+	public $capability          = 'manage_options';
+//	public $menu_slug           = 'wpsp-child-example';
+	public $icon_url            = 'dashicons-admin-generic';
+//	public $position            = 2;
+	public $isSubAdminPage      = true;
+	public $parent_slug         = 'wpsp';
+//	public $removeFirstSubmenu  = false;
 
-//	private mixed $checkDatabase        = null;
-	private mixed $table                = null;
-	private mixed $currentTab           = null;
-	private mixed $currentPage          = null;
+//	private $checkDatabase      = null;
+	private $table              = null;
+	private $currentTab         = null;
+	private $currentPage        = null;
 
 	/*
 	 *

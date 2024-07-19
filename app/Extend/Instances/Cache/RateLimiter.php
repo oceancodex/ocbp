@@ -2,10 +2,6 @@
 
 namespace WPSP\app\Extend\Instances\Cache;
 
-use Symfony\Component\Cache\Adapter\DoctrineDbalAdapter;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Component\Cache\Adapter\MemcachedAdapter;
-use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\RateLimiter\LimiterInterface;
 use WPSP\Funcs;
 use WPSP\app\Traits\InstancesTrait;
@@ -15,18 +11,18 @@ class RateLimiter extends \WPSPCORE\Cache\RateLimiter {
 
 	use InstancesTrait;
 
-	protected ?string                                                                  $key              = null;
-	protected ?string                                                                  $store            = null;
-	protected ?array                                                                   $connectionParams = null;
-	protected DoctrineDbalAdapter|FilesystemAdapter|MemcachedAdapter|RedisAdapter|null $adapter          = null;
-	private static ?RateLimiter                                                        $instance         = null;
+	protected ?string           $key              = null;
+	protected ?string           $store            = null;
+	protected ?array            $connectionParams = null;
+	protected ?object           $adapter          = null;
+	private static ?RateLimiter $instance         = null;
 
 	/*
 	 *
 	 */
 
 	protected function beforeInstanceConstruct(): void {
-		$this->store            = Funcs::config('cache.rate_limiter');
+		$this->store = Funcs::config('cache.rate_limiter');
 //		$this->key              = $this->request->getClientIp();
 //		$this->connectionParams = [];
 

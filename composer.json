@@ -1,6 +1,6 @@
 {
 	"name": "oceancodex/wpsp",
-	"version": "8.0.0",
+	"version": "7.4.0",
 	"description": "WordPress Starter Plugin",
 	"type": "wordpress-plugin",
 	"keywords": [
@@ -8,12 +8,21 @@
 	],
 	"license": "GPL-3.0-or-later",
 	"require": {
-		"php": "^8.0",
+		"php": "^7.4",
 		"ext-curl": "*",
 		"ext-intl": "*",
 		"ext-json": "*",
-		"oceancodex/wpsp-core": "^8.0.0"
+		"oceancodex/wpsp-core": "^7.4.0"
 	},
+	"repositories": [
+		{
+			"type": "path",
+			"url": "../wpsp-core",
+			"options": {
+				"symlink": true
+			}
+		}
+	],
 	"config": {
 		"sort-packages": true,
 		"autoloader-suffix": "_wpsp_1719507007"

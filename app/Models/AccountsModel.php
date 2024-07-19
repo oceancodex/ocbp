@@ -3,12 +3,13 @@ namespace WPSP\app\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use WPSP\app\Traits\ModelsTrait;
 use WPSPCORE\Traits\ObserversTrait;
 
 class AccountsModel extends Model {
-	use SoftDeletes, ObserversTrait;
+	use ModelsTrait, SoftDeletes, ObserversTrait;
 
-//	protected $connection;
+	protected $connection = 'wordpress';
 	protected $table      = 'cm_accounts';
 //	protected $primaryKey = 'id';
 
@@ -45,5 +46,11 @@ class AccountsModel extends Model {
 //	protected static array $observers = [
 //		\WPSP\app\Observers\AccountsObserver::class,
 //	];
+
+//	public function __construct(array $attributes = []) {
+//		$this->getConnection()->setTablePrefix('wp_wpsp_');
+//		$this->setConnection(Funcs::instance()->_getDBTablePrefix(false) . 'mysql');
+//		parent::__construct($attributes);
+//	}
 
 }

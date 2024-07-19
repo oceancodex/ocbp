@@ -1,15 +1,16 @@
 <?php
 namespace WPSP\app\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use WPSP\app\Traits\ModelsTrait;
 use WPSPCORE\Traits\ObserversTrait;
 
-class Users extends Model {
-	use SoftDeletes, ObserversTrait;
+class VideosModel extends Model {
+	use ModelsTrait, SoftDeletes, ObserversTrait;
 
-//	protected $connection;
-	protected $table      = 'users';
+	protected $connection = 'mongodb';
+	protected $table      = 'wpsp_mongodb_videos';
 //	protected $primaryKey = 'id';
 
 //	protected $appends;
@@ -43,11 +44,13 @@ class Users extends Model {
 //	public    $wasRecentlyCreated;
 
 //	protected static array $observers = [
-//		\WPSP\app\Observers\UsersObserver::class,
+//		\WPSP\app\Observers\SettingsObserver::class,
 //	];
 
-	public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany {
-		return $this->hasMany(Posts::class, 'user_id', 'id');
-	}
+//	public function __construct(array $attributes = []) {
+//		$this->getConnection()->setTablePrefix('wp_wpsp_');
+//		$this->setConnection(Funcs::instance()->_getDBTablePrefix(false) . 'mysql');
+//		parent::__construct($attributes);
+//	}
 
 }

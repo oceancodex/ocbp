@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use WPSP\app\Traits\ModelsTrait;
 use WPSPCORE\Traits\ObserversTrait;
 
-class ProductsModel extends Model {
+class UsersModel extends Model {
 	use ModelsTrait, SoftDeletes, ObserversTrait;
 
 	protected $connection = 'wordpress';
-	protected $table      = 'products';
+	protected $table      = 'users';
 //	protected $primaryKey = 'id';
 
 //	protected $appends;
@@ -44,7 +44,7 @@ class ProductsModel extends Model {
 //	public    $wasRecentlyCreated;
 
 //	protected static array $observers = [
-//		\WPSP\app\Observers\ProductsObserver::class,
+//		\WPSP\app\Observers\UsersObserver::class,
 //	];
 
 //	public function __construct(array $attributes = []) {
@@ -52,5 +52,9 @@ class ProductsModel extends Model {
 //		$this->setConnection(Funcs::instance()->_getDBTablePrefix(false) . 'mysql');
 //		parent::__construct($attributes);
 //	}
+
+	public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany {
+		return $this->hasMany(PostsModel::class, 'user_id', 'id');
+	}
 
 }

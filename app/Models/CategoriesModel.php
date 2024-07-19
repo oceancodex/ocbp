@@ -3,12 +3,13 @@ namespace WPSP\app\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use WPSP\app\Traits\ModelsTrait;
 use WPSPCORE\Traits\ObserversTrait;
 
-class Categories extends Model {
-	use SoftDeletes, ObserversTrait;
+class CategoriesModel extends Model {
+	use ModelsTrait, SoftDeletes, ObserversTrait;
 
-//	protected $connection;
+	protected $connection = 'wordpress';
 	protected $table      = 'categories';
 //	protected $primaryKey = 'id';
 
@@ -46,8 +47,14 @@ class Categories extends Model {
 //		\WPSP\app\Observers\CategoriesObserver::class,
 //	];
 
+//	public function __construct(array $attributes = []) {
+//		$this->getConnection()->setTablePrefix('wp_wpsp_');
+//		$this->setConnection(Funcs::instance()->_getDBTablePrefix(false) . 'mysql');
+//		parent::__construct($attributes);
+//	}
+
 	public function posts(): \Illuminate\Database\Eloquent\Relations\BelongsToMany {
-		return $this->belongsToMany(Posts::class, 'post_category_relationships', 'category_id', 'post_id');
+		return $this->belongsToMany(PostsModel::class, 'post_category_relationships', 'category_id', 'post_id');
 	}
 
 	public function addPost($postId): void {

@@ -3,12 +3,13 @@ namespace WPSP\app\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use WPSP\app\Traits\ModelsTrait;
 use WPSPCORE\Traits\ObserversTrait;
 
-class Settings extends Model {
-	use SoftDeletes, ObserversTrait;
+class SettingsModel extends Model {
+	use ModelsTrait, SoftDeletes, ObserversTrait;
 
-//	protected $connection;
+	protected $connection = 'wordpress';
 	protected $table      = 'settings';
 //	protected $primaryKey = 'id';
 
@@ -45,5 +46,11 @@ class Settings extends Model {
 //	protected static array $observers = [
 //		\WPSP\app\Observers\SettingsObserver::class,
 //	];
+
+//	public function __construct(array $attributes = []) {
+//		$this->getConnection()->setTablePrefix('wp_wpsp_');
+//		$this->setConnection('wordpress');
+//		parent::__construct($attributes);
+//	}
 
 }

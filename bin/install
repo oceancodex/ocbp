@@ -82,6 +82,7 @@ $envContent = file_get_contents(__DIR__ . '/../.env');
 $envContent = preg_replace('/APP_NAME="(.*?)"/', 'APP_NAME="' . $projectName . '"', $envContent);
 $envContent = preg_replace('/APP_SHORT_NAME="(.*?)"/', 'APP_SHORT_NAME="' . $projectShortName . '"', $envContent);
 $envContent = preg_replace('/DB_TABLE_PREFIX="(.*?)"/', 'DB_TABLE_PREFIX="' . $prefixDBTable . '"', $envContent);
+//$envContent = preg_replace('/DB_CONNECTION="(.*?)"/', 'DB_CONNECTION="wordpress"', $envContent);
 $envContent = preg_replace('/CACHE_PREFIX="(.*?)"/', 'CACHE_PREFIX="' . $prefixCache . '"', $envContent);
 file_put_contents(__DIR__ . '/../.env', $envContent);
 
@@ -105,17 +106,25 @@ $poContent = preg_replace('/X-Domain: (.*?)"/', 'X-Domain: ' . $textDomain . '"'
 file_put_contents(__DIR__ . '/../resources/lang/wpsp-vi.po', $poContent);
 rename(__DIR__ . '/../resources/lang/wpsp-vi.po', __DIR__ . '/../resources/lang/' . $textDomain . '-vi.po');
 
-// Replace some scripts.
-$scriptDatabaseContent = file_get_contents(__DIR__ . '/../public/js/modules/web/admin-pages/wpsp/Database.min.js');
-$scriptDatabaseContent = preg_replace('/wpsp_localize/', $projectShortName . '_localize', $scriptDatabaseContent);
-file_put_contents(__DIR__ . '/../public/js/modules/web/admin-pages/wpsp/Database.min.js', $scriptDatabaseContent);
-
 // Replace example migrations.
 $migrationPaths = getDirContents(__DIR__ . '/../database/migrations');
 foreach ($migrationPaths as $migrationPath) {
 	$migrationContent = file_get_contents($migrationPath);
 	$migrationContent = preg_replace('/wpsp_/', $prefixDBTable, $migrationContent);
 	file_put_contents($migrationPath, $migrationContent);
+}
+
+// Replace database config file.
+$databaseConfigContent = file_get_contents(__DIR__ . '/../config/database.php');
+$databaseConfigContent = preg_replace('/wpsp_/', $prefixDBTable, $databaseConfigContent);
+file_put_contents(__DIR__ . '/../config/database.php', $databaseConfigContent);
+
+// Replace in Models.
+$modelPaths = getDirContents(__DIR__ . '/../app/Models');
+foreach ($modelPaths as $modelPath) {
+	$modelContent = file_get_contents($modelPath);
+	$modelContent = preg_replace('/wpsp_/', $prefixDBTable, $modelContent);
+	file_put_contents($modelPath, $modelContent);
 }
 
 // Replace Readme files.
@@ -154,8 +163,18 @@ file_put_contents(__DIR__ . '/../public/plugin.json', $pluginContent);
 
 // Replace in Database.ts
 $databaseContent = file_get_contents(__DIR__ . '/../resources/ts/modules/web/admin-pages/wpsp/Database.ts');
-$databaseContent = preg_replace('/wpsp_localize/', $projectShortName . '_localize', $databaseContent);
+$databaseContent = preg_replace('/wpsp_/', $projectShortName . '_', $databaseContent);
 file_put_contents(__DIR__ . '/../resources/ts/modules/web/admin-pages/wpsp/Database.ts', $databaseContent);
+
+// Replace some scripts.
+$scriptDatabaseContent = file_get_contents(__DIR__ . '/../public/js/modules/web/admin-pages/wpsp/Database.min.js');
+$scriptDatabaseContent = preg_replace('/wpsp_/', $projectShortName . '_', $scriptDatabaseContent);
+file_put_contents(__DIR__ . '/../public/js/modules/web/admin-pages/wpsp/Database.min.js', $scriptDatabaseContent);
+
+// Replace in AjaxRoute.php
+$databaseContent = file_get_contents(__DIR__ . '/../routes/AjaxRoute.php');
+$databaseContent = preg_replace('/wpsp_handle_database/', $projectShortName . '_handle_database', $databaseContent);
+file_put_contents(__DIR__ . '/../routes/AjaxRoute.php', $databaseContent);
 
 // Messages.
 echo "\n";
@@ -182,8 +201,9 @@ echo "\n\n";
 exec('npm run mix-production');
 
 echo "\n";
-echo 'Done! Your plugin install successfully.';
-echo "\n";
-echo 'Please go to menu Plugin and then active your new plugin: "'.$projectName.'"';
+echo 'Done! Your new plugin based on WPSP has been successfully installed.';
+echo "\n\n";
+echo 'Please go to /wp-admin > Plugin menu and then activate your new plugin: "'.$projectName.'"';
+echo "\n\n";
 
 exit();

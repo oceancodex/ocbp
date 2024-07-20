@@ -22,7 +22,7 @@ class RateLimiter extends \WPSPCORE\Cache\RateLimiter {
 	 */
 
 	protected function beforeInstanceConstruct(): void {
-		$this->store = Funcs::config('cache.rate_limiter');
+		$this->store            = Funcs::config('cache.rate_limiter');
 //		$this->key              = $this->request->getClientIp();
 //		$this->connectionParams = [];
 

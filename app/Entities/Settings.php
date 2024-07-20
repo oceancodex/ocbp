@@ -5,6 +5,10 @@ use Doctrine\ORM\Mapping as ORM;
 use WPSPCORE\Base\BaseEntity;
 
 /**
+ * @see https://www.doctrine-project.org/projects/doctrine-orm/en/3.2/reference/association-mapping.html
+ */
+
+/**
  * @ORM\Entity
  * @ORM\Table(name="settings")
  */

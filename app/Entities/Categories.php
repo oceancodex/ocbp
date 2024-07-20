@@ -9,31 +9,31 @@ use WPSPCORE\Base\BaseEntity;
  * @see https://www.doctrine-project.org/projects/doctrine-orm/en/3.2/reference/association-mapping.html
  */
 
-/**
- * @ORM\Entity
- * @ORM\Table(name: 'categories')
- */
+///**
+// * @ORM\Entity
+// * @ORM\Table(name="categories")
+// */
 class Categories extends BaseEntity {
 
 	/**
 	 * @ORM\Id
-	 * @ORM\Column(type: 'integer')
+	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue
 	 */
 	protected int $id;
 
 	/**
-	 * @ORM\Column(type: "string", nullable: false)
+	 * @ORM\Column(type="string", nullable=false)
 	 */
 	private string $name;
 
 	/**
-	 * @ORM\Column(type: "text", nullable: true)
+	 * @ORM\Column(type="text", nullable=true)
 	 */
 	private string $description;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity: Posts::class, mappedBy: 'categories')
+	 * @ORM\ManyToMany(targetEntity="Posts", mappedBy="categories")
 	 */
 	private Collection $posts;
 

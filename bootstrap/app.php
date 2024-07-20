@@ -52,7 +52,12 @@ add_action('init', function() {
 	/**
 	 * Translation.
 	 */
-	(new Translator())->init();
+	Translator::init();
+
+	/**
+	 * Updater.
+	 */
+	Updater::init();
 
 	/**
 	 * Routers.
@@ -61,10 +66,5 @@ add_action('init', function() {
 	(new WebRoute())->init();
 	(new AjaxRoute())->init();
 	(new ScheduleRoute())->init();
-
-	/**
-	 * Updater.
-	 */
-	(new Updater())->init();
 
 });

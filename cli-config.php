@@ -30,7 +30,7 @@ $connectionParams = include __DIR__ . '/config/migrations-db.php';
 $eventManager = new EventManager();
 $eventManager->addEventListener(Events::loadClassMetadata, $tablePrefix);
 
-$ORMConfig = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
+$ORMConfig = ORMSetup::createAnnotationMetadataConfiguration($paths, $isDevMode);
 
 $connection = DriverManager::getConnection($connectionParams);
 $connection->getConfiguration()->setSchemaAssetsFilter(static function(string $className): bool {

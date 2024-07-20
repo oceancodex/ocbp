@@ -29,7 +29,7 @@ class Cache extends \WPSPCORE\Cache\Cache {
 		self::instance()->prepare()->global();
 	}
 
-	public static function instance(): ?Cache {
+	public static function instance(): ?self {
 		if (!self::$instance) {
 			self::$instance = (new static(
 				Funcs::instance()->_getMainPath(),
@@ -52,7 +52,7 @@ class Cache extends \WPSPCORE\Cache\Cache {
 		return self::instance()->_get($key, $callback);
 	}
 
-	public static function delete($key): bool|string {
+	public static function delete($key) {
 		return self::instance()->_delete($key);
 	}
 

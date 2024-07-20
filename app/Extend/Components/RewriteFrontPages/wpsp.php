@@ -12,18 +12,18 @@ class wpsp extends BaseRewriteFrontPage {
 
 	use InstancesTrait;
 
-	public $path                 = null;
-	public $rewriteIdent         = 'wpsp';
-	public $useTemplate          = false;
-	public $rewriteFrontPageSlug = 'rewrite-front-pages';
+	public $path                  = null;
+	public $rewriteIdent          = 'wpsp';
+	public $useTemplate           = false;
+	public $rewriteFrontPageSlug  = 'rewrite-front-pages';
 
 	/**
 	 * Private properties.
 	 */
 
-	private $currentURL     = null;
-	private $queryVarGroup1 = null;
-	private $seo            = null;
+	private $currentURL           = null;
+	private $queryVarGroup1       = null;
+	private $seo                  = null;
 
 	/*
 	 *

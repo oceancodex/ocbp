@@ -11,9 +11,15 @@ class RateLimiter extends \WPSPCORE\Cache\RateLimiter {
 
 	use InstancesTrait;
 
-	protected ?string $key              = null;
-	protected ?string $store            = null;
-	protected ?array  $connectionParams = null;
+	protected $key              = null;
+	protected $store            = null;
+	protected $connectionParams = null;
+
+	/*
+	 *
+	 */
+
+	public static ?self $instance = null;
 
 	/*
 	 *
@@ -36,18 +42,18 @@ class RateLimiter extends \WPSPCORE\Cache\RateLimiter {
 	 */
 
 	public static function init(): void {
-		self::instance()->prepare()->global();
+		static::instance()->prepare()->global();
 	}
 
 	public static function instance(): ?self {
-		if (!self::$instance) {
-			self::$instance = (new static(
+		if (!static::$instance) {
+			static::$instance = (new static(
 				Funcs::instance()->_getMainPath(),
 				Funcs::instance()->_getRootNamespace(),
 				Funcs::instance()->_getPrefixEnv()
 			));
 		}
-		return self::$instance;
+		return static::$instance;
 	}
 
 	/*
@@ -55,7 +61,7 @@ class RateLimiter extends \WPSPCORE\Cache\RateLimiter {
 	 */
 
 	public static function get($limiterName = null, $key = null): LimiterInterface {
-		$instance = self::instance();
+		$instance = static::instance();
 		$instance->setKey($key);
 		if (!$limiterName) {
 			return $instance->prepare()->limiters['default'];

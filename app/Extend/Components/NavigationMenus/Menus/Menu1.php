@@ -10,7 +10,7 @@ class Menu1 extends BaseNavigationMenu {
 	use InstancesTrait;
 
 	// Args.
-//	public $menu                 = 'menu-1';
+	public $menu                 = 'menu-1';
 //	public $menu_class           = '';
 //	public $menu_id              = '';            // The "id" attribute of the <ul> element.
 //	public $container            = '';
@@ -35,7 +35,7 @@ class Menu1 extends BaseNavigationMenu {
 
 	public function customProperties(): void {
 //		$this->args->menu        = 'menu-1';
-		$this->args->fallback_cb = $this->fallback();
+//		$this->args->fallback_cb = $this->fallback();
 	}
 
 	public function fallback(): \Closure {

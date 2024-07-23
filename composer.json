@@ -16,7 +16,6 @@
 	},
 	"require-dev": {
 	},
-	"minimum-stability": "dev",
 	"config": {
 		"sort-packages": true,
 		"autoloader-suffix": "_wpsp_1719507007"

@@ -9,27 +9,10 @@
 	"license": "GPL-3.0-or-later",
 	"require": {
 		"php": "^7.4",
-		"oceancodex/wpsp-core": "^7.4.0",
-		"oceancodex/wpsp-mongodb": "^7.4.0"
+		"oceancodex/wpsp-core": "^7.4.0"
 	},
 	"require-dev": {
 	},
-	"repositories": [
-		{
-			"type": "path",
-			"url": "../wpsp-core",
-			"options": {
-				"symlink": true
-			}
-		},
-		{
-			"type": "path",
-			"url": "../wpsp-mongodb",
-			"options": {
-				"symlink": true
-			}
-		}
-	],
 	"config": {
 		"sort-packages": true,
 		"autoloader-suffix": "_wpsp_1719507007"

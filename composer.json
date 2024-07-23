@@ -14,6 +14,8 @@
 		"ext-json": "*",
 		"oceancodex/wpsp-core": "^8.0.0"
 	},
+	"require-dev": {
+	},
 	"config": {
 		"sort-packages": true,
 		"autoloader-suffix": "_wpsp_1719507007"
@@ -45,7 +47,5 @@
 		],
 		"post-create-project-cmd": [
 		]
-	},
-	"require-dev": {
 	}
 }

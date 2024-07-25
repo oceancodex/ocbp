@@ -17,34 +17,39 @@ class wpsp extends BaseAdminPage {
 
 	use InstancesTrait;
 
-	public $menu_title          = 'WPSP Settings';
-//	public $page_title          = 'WPSP';
-	public $capability          = 'edit_posts';
-//	public $menu_slug           = 'wpsp';
-	public $icon_url            = 'dashicons-admin-generic';
-	public $position            = 2;
-//	public $isSubAdminPage      = true;
-//	public $parent_slug         = 'options-general.php';
-	public $removeFirstSubmenu  = true;
+	public $menu_title                  = 'WPSP Settings';
+//	public $page_title                  = 'WPSP';
+	public $capability                  = 'edit_posts';
+//	public $menu_slug                   = 'wpsp';
+	public $icon_url                    = 'dashicons-admin-generic';
+	public $position                    = 2;
+//	public $parent_slug                 = 'options-general.php';
+//	public $callback_index              = true;
+//	public $is_submenu_page             = false;
+	public $remove_first_submenu        = true;
+//	public $urls_highlight_current_menu = null;
 
-	private $checkDatabase      = null;
-	private $table              = null;
-	private $currentTab         = null;
-	private $currentPage        = null;
+	private $checkDatabase              = null;
+	private $table                      = null;
+	private $currentTab                 = null;
+	private $currentPage                = null;
 
 	/*
 	 *
 	 */
 
 	public function customProperties(): void {
-//		$this->menu_title     = '';
-//		$this->page_title     = '';
-//		$this->capability     = '';
-//		$this->menu_slug      = '';
-//		$this->icon_url       = '';
-//		$this->position       = '';
-//		$this->isSubAdminPage = false;
-//		$this->parent_slug    = '';
+//		$this->menu_title                  = '';
+//		$this->page_title                  = '';
+//		$this->capability                  = '';
+//		$this->menu_slug                   = '';
+//		$this->icon_url                    = '';
+//		$this->position                    = '';
+//		$this->parent_slug                 = '';
+//	    $this->callback_index              = false;
+//		$this->is_submenu_page             = true;
+//	    $this->remove_first_submenu        = false;
+//		$this->urls_highlight_current_menu = [];
 
 		$this->currentTab   = $this->request->get('tab');
 		$this->currentPage  = $this->request->get('page');
@@ -99,14 +104,14 @@ class wpsp extends BaseAdminPage {
 
 		$requestParams = $this->request->query->all();
 		$menuSlug      = $this->getMenuSlug();
-		$checkLicense  = License::checkLicense();
+//		$checkLicense  = License::checkLicense();
 
 		$table = $this->table;
 
 		echo Funcs::view('modules.web.admin-pages.wpsp.main', compact(
 			'requestParams',
 			'menuSlug',
-			'checkLicense',
+//			'checkLicense',
 			'table'
 		))->with([
 			'checkDatabase' => $this->checkDatabase,

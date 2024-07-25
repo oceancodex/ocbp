@@ -35,7 +35,7 @@ class Menu1 extends BaseNavigationMenu {
 
 	public function customProperties(): void {
 //		$this->args->menu        = 'menu-1';
-//		$this->args->fallback_cb = $this->fallback();
+		$this->args->fallback_cb = $this->fallback();
 	}
 
 	public function fallback(): \Closure {

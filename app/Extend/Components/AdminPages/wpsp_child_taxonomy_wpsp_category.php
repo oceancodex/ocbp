@@ -17,22 +17,22 @@ class wpsp_child_taxonomy_wpsp_category extends BaseAdminPage {
 
 	use InstancesTrait;
 
-	public mixed  $menu_title                  = 'WPSP Category';
-//	public mixed  $page_title                  = 'wpsp_child_taxonomy_wpsp_category';
-	public mixed  $capability                  = 'manage_options';
-//	public mixed  $menu_slug                   = 'wpsp-child-taxonomy-wpsp-category';
-	public mixed  $icon_url                    = 'dashicons-admin-generic';
-//	public mixed  $position                    = 2;
-	public mixed  $parent_slug                 = 'wpsp';
-	public mixed  $callback_index              = false;
-	public mixed  $is_submenu_page             = true;
-//	public mixed  $remove_first_submenu        = false;
-	public ?array $urls_highlight_current_menu = ['/edit-tags.php\?taxonomy=wpsp_category/', '/term.php\?taxonomy=wpsp_category/'];
+	public  $menu_title                  = 'WPSP Category';
+//	public  $page_title                  = 'wpsp_child_taxonomy_wpsp_category';
+	public  $capability                  = 'manage_options';
+//	public  $menu_slug                   = 'wpsp-child-taxonomy-wpsp-category';
+	public  $icon_url                    = 'dashicons-admin-generic';
+//	public  $position                    = 2;
+	public  $parent_slug                 = 'wpsp';
+	public  $callback_index              = false;
+	public  $is_submenu_page             = true;
+//	public  $remove_first_submenu        = false;
+	public  $urls_highlight_current_menu = ['/edit-tags.php\?taxonomy=wpsp_category/', '/term.php\?taxonomy=wpsp_category/'];
 
-//	private mixed $checkDatabase               = null;
-//	private mixed $table                       = null;
-	private mixed $currentTab                  = null;
-	private mixed $currentPage                 = null;
+//	private $checkDatabase               = null;
+//	private $table                       = null;
+	private $currentTab                  = null;
+	private $currentPage                 = null;
 
 	/*
 	 *

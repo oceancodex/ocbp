@@ -17,22 +17,22 @@ class wpsp_child_post_type_wpsp_content extends BaseAdminPage {
 
 	use InstancesTrait;
 
-	public mixed  $menu_title                  = 'WPSP Content';
-//	public mixed  $page_title                  = 'wpsp_child_post_type_wpsp_content';
-	public mixed  $capability                  = 'manage_options';
-//	public mixed  $menu_slug                   = 'wpsp-child-post-type-wpsp-content';
-	public mixed  $icon_url                    = 'dashicons-admin-generic';
-//	public mixed  $position                    = 2;
-	public mixed  $parent_slug                 = 'wpsp';
-	public mixed  $callback_index              = false;
-	public mixed  $is_submenu_page             = true;
-//	public mixed  $remove_first_submenu        = false;
-	public ?array $urls_highlight_current_menu = ['/post-new.php\?post_type=wpsp_content/'];
+	public  $menu_title                  = 'WPSP Content';
+//	public  $page_title                  = 'wpsp_child_post_type_wpsp_content';
+	public  $capability                  = 'manage_options';
+//	public  $menu_slug                   = 'wpsp-child-post-type-wpsp-content';
+	public  $icon_url                    = 'dashicons-admin-generic';
+//	public  $position                    = 2;
+	public  $parent_slug                 = 'wpsp';
+	public  $callback_index              = false;
+	public  $is_submenu_page             = true;
+//	public  $remove_first_submenu        = false;
+	public  $urls_highlight_current_menu = ['/post-new.php\?post_type=wpsp_content/'];
 
 //	private mixed $checkDatabase               = null;
-	private mixed $table                       = null;
-	private mixed $currentTab                  = null;
-	private mixed $currentPage                 = null;
+	private $table                       = null;
+	private $currentTab                  = null;
+	private $currentPage                 = null;
 
 	/*
 	 *

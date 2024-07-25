@@ -64,7 +64,7 @@ class wpsp_content extends BasePostType {
 //	public $exclude_from_search             = false;
 //	public $publicly_queryable              = true;
 //	public $show_ui                         = true;
-//	public $show_in_menu                    = true;
+	public $show_in_menu                    = false;
 //	public $show_in_nav_menus               = true;
 //	public $show_in_admin_bar               = true;
 //	public $show_in_rest                    = true;

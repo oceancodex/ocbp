@@ -13,7 +13,7 @@ class wpsp_category extends BaseTaxonomy {
 	public $object_type                = 'wpsp_content';
 
 	// Labels.
-//	public $name                       = '';
+	public $name                       = 'WPSP Category';
 //	public $singular_name              = '';
 //	public $search_items               = '';
 //	public $popular_items              = '';

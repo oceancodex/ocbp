@@ -29,7 +29,7 @@ class wpsp_child_post_type_wpsp_content extends BaseAdminPage {
 //	public  $remove_first_submenu        = false;
 	public  $urls_highlight_current_menu = ['/post-new.php\?post_type=wpsp_content/'];
 
-//	private mixed $checkDatabase               = null;
+//	private $checkDatabase               = null;
 	private $table                       = null;
 	private $currentTab                  = null;
 	private $currentPage                 = null;

@@ -13,7 +13,7 @@ class wpsp_tab_dashboard extends BaseAdminPage {
 	public  $menu_title                  = 'Tab: Dashboard';
 //	public  $page_title                  = 'Tab: Dashboard';
 	public  $capability                  = 'manage_options';
-//	public  $menu_slug                   = 'wpsp-dashboard';
+//	public  $menu_slug                   = 'wpsp&tab=dashboard';
 	public  $icon_url                    = 'dashicons-admin-generic';
 //	public  $position                    = 2;
 	public  $parent_slug                 = 'wpsp';

@@ -52,7 +52,7 @@ class Funcs extends \WPSPCORE\Funcs {
 		return self::instance()->_asset($path, $secure);
 	}
 
-	public static function view($viewName, $data = [], $mergeData = []): \Illuminate\Contracts\View\View {
+	public static function view($viewName, $data = [], $mergeData = []) {
 		return self::instance()->_view($viewName, $data, $mergeData);
 	}
 
@@ -89,7 +89,12 @@ class Funcs extends \WPSPCORE\Funcs {
 	}
 
 	public static function faker() {
-		return \Faker\Factory::create(Funcs::config('app.faker_locale', 'en_US'));
+		try {
+			return \WPSPCORE\Faker\Faker::create(Funcs::config('app.faker_locale', 'en_US'));
+		}
+		catch (\Exception|\Throwable $e) {
+			return null;
+		}
 	}
 
 	public static function locale(): string {

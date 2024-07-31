@@ -13,7 +13,7 @@ class wpsp_tab_table extends BaseAdminPage {
 	public  $menu_title                  = 'Tab: Table';
 //	public  $page_title                  = 'Tab: Table';
 	public  $capability                  = 'manage_options';
-//	public  $menu_slug                   = 'wpsp-settings';
+//	public  $menu_slug                   = 'wpsp-table';
 	public  $icon_url                    = 'dashicons-admin-generic';
 //	public  $position                    = 2;
 	public  $parent_slug                 = 'wpsp';

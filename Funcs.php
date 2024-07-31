@@ -89,7 +89,12 @@ class Funcs extends \WPSPCORE\Funcs {
 	}
 
 	public static function faker() {
-		return \Faker\Factory::create(Funcs::config('app.faker_locale', 'en_US'));
+		try {
+			return \WPSPCORE\Faker\Faker::create(Funcs::config('app.faker_locale', 'en_US'));
+		}
+		catch (\Exception|\Throwable $e) {
+			return null;
+		}
 	}
 
 	public static function locale(): string {

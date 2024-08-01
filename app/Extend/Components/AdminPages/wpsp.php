@@ -9,6 +9,7 @@ use WPSP\app\Extend\Instances\Cache\RateLimiter;
 use WPSP\app\Models\SettingsModel;
 use WPSP\app\Models\VideosModel;
 use WPSP\app\Traits\InstancesTrait;
+use WPSP\app\View\Share;
 use WPSP\Funcs;
 use WPSPCORE\Base\BaseAdminPage;
 
@@ -50,9 +51,15 @@ class wpsp extends BaseAdminPage {
 //	    $this->remove_first_submenu        = false;
 //		$this->urls_highlight_current_menu = [];
 
-		$this->currentTab   = $this->request->get('tab');
-		$this->currentPage  = $this->request->get('page');
-		$this->page_title   = ($this->currentTab ? Funcs::trans('messages.' . $this->currentTab) : Funcs::trans('messages.dashboard')) . ' - ' . Funcs::config('app.name');
+		$this->currentTab  = $this->request->get('tab');
+		$this->currentPage = $this->request->get('page');
+		if (class_exists('\WPSPCORE\Translation\Translator')) {
+			$this->page_title = ($this->currentTab ? Funcs::trans('messages.' . $this->currentTab) : Funcs::trans('messages.dashboard')) . ' - ' . Funcs::config('app.name');
+		}
+		else {
+			$pageTitle = $this->currentTab ?? 'Dashboard';
+			$this->page_title = Funcs::trans(ucfirst($pageTitle), true);
+		}
 	}
 
 	/*
@@ -67,6 +74,14 @@ class wpsp extends BaseAdminPage {
 	public function beforeInit(): void {}
 
 	public function afterInit(): void {
+		// Custom highlight current menu.
+//		if (preg_match('/' . $this->menu_slug . '$|' . $this->menu_slug . '&updated=true$/', $this->request->getRequestUri())) {
+//			add_filter('submenu_file', function($submenu_file) {
+//				return $this->menu_slug;
+//			});
+//		}
+
+		// Redirect to the "Database" tab if database version not valid.
 		try {
 			if ($this->currentPage == $this->menu_slug) {
 				// Check database version and maybe redirect.
@@ -103,12 +118,13 @@ class wpsp extends BaseAdminPage {
 
 	public function index(): void {
 		if ($this->request->get('updated') && $this->parent_slug !== 'options-general.php' && $this->request->get('tab') !== 'table') {
-			Funcs::notice(Funcs::trans('Updated successfully', true), 'success');
+			Funcs::notice(Funcs::trans('Updated successfully', true), 'success', !class_exists('\WPSPCORE\View\Blade'));
 		}
 
+		$requestParams = $this->request->query->all();
+		$menuSlug      = $this->getMenuSlug();
+
 		try {
-			$requestParams = $this->request->query->all();
-			$menuSlug      = $this->getMenuSlug();
 //		    $checkLicense  = License::checkLicense();
 
 			// Test cache.
@@ -120,7 +136,7 @@ class wpsp extends BaseAdminPage {
 
 			$table = $this->table;
 
-			echo Funcs::view('modules.web.admin-pages.wpsp.main', compact(
+			echo Funcs::view('modules.admin-pages.wpsp.main', compact(
 				'requestParams',
 				'menuSlug',
 //			    'checkLicense',
@@ -130,7 +146,13 @@ class wpsp extends BaseAdminPage {
 			]);
 		}
 		catch (\Exception|\Throwable $e) {
-			Funcs::notice($e->getMessage(), 'error', true, true);
+			Funcs::notice($e->getMessage() . ' <code>(' . __CLASS__ . ')</code>', 'error', true, true);
+
+			$user          = wp_get_current_user();
+			$settings      = Share::instance()->variables()['settings'] ?? null;
+			$checkDatabase = $this->checkDatabase;
+
+			include(Funcs::instance()->_getResourcesPath('/views/modules/admin-pages/wpsp/main.php'));
 		}
 	}
 

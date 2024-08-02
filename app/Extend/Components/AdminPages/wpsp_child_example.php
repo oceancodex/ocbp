@@ -39,18 +39,6 @@ class wpsp_child_example extends BaseAdminPage {
 	 */
 
 	public function customProperties(): void {
-//		$this->menu_title                  = '';
-//		$this->page_title                  = '';
-//		$this->capability                  = '';
-//		$this->menu_slug                   = '';
-//		$this->icon_url                    = '';
-//		$this->position                    = '';
-//		$this->parent_slug                 = '';
-//	    $this->callback_index              = false;
-//		$this->is_submenu_page             = true;
-//	    $this->remove_first_submenu        = false;
-//		$this->urls_highlight_current_menu = [];
-
 		$this->currentTab   = $this->request->get('tab');
 		$this->currentPage  = $this->request->get('page');
 		$this->page_title   = ($this->currentTab ? Funcs::trans('messages.' . $this->currentTab) : Funcs::trans('messages.wpsp_child_example')) . ' - ' . Funcs::config('app.name');

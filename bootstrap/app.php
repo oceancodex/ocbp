@@ -1,4 +1,9 @@
 <?php
+if (PHP_VERSION_ID < 80000 || PHP_VERSION_ID >= 80100) {
+	wp_admin_notice('"WPSP" requires PHP version from 8.0.0 to below 8.1.0. Please check your PHP version!', ['type' => 'error', 'dismissible' => true]);
+	return;
+}
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use WPSP\routes\Api;
